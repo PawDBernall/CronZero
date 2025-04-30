@@ -1,7 +1,0 @@
-{
-  "name": "Juego Cronómetro Cero",
-  "description": "Un juego para probar tus reflejos parando el cronómetro justo en las 000 milésimas.",
-  "version": "1.0.0",
-  "requestFramePermissions": [],
-  "prompt": ""
-}
