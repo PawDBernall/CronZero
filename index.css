@@ -1,0 +1,331 @@
+/* Estilos generales */
+body {
+  margin: 0;
+  font-family: 'Roboto', sans-serif;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  text-align: center;
+  overflow: hidden;
+}
+
+#root {
+  width: 100%;
+  max-width: 550px; /* Un poco más ancho para el selector y reporte */
+  padding: 20px;
+}
+
+/* Contenedor principal del juego */
+.game-container {
+  background-color: rgba(0, 0, 0, 0.4);
+  padding: 30px 40px;
+  border-radius: 15px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(5px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  transition: transform 0.3s ease-out;
+}
+
+.game-container:hover {
+    transform: scale(1.01); /* Reducido un poco el zoom */
+}
+
+/* Selector de dificultad */
+.difficulty-selector {
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+}
+
+.difficulty-selector button {
+    font-family: 'Roboto', sans-serif;
+    padding: 8px 15px;
+    font-size: 0.9em;
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    border-radius: 6px;
+    cursor: pointer;
+    background-color: rgba(255, 255, 255, 0.1);
+    color: #eee;
+    transition: all 0.2s ease;
+}
+
+.difficulty-selector button.active {
+    background-color: #00ffcc;
+    color: #1a1a1a;
+    border-color: #00ffcc;
+    font-weight: bold;
+    box-shadow: 0 0 10px rgba(0, 255, 204, 0.5);
+}
+
+.difficulty-selector button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.difficulty-selector button:not(.active):not(:disabled):hover {
+    background-color: rgba(255, 255, 255, 0.2);
+    border-color: rgba(255, 255, 255, 0.8);
+}
+
+
+/* Título */
+h1 {
+  font-family: 'Orbitron', sans-serif;
+  color: #f0f0f0;
+  margin-bottom: 20px; /* Reducido un poco */
+  font-size: 2.3em; /* Ajustado */
+   text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+}
+
+/* Cronómetro con dígitos separados */
+.timer-digits {
+  font-family: 'Orbitron', 'Roboto Mono', monospace; /* Prioriza Orbitron, luego Mono */
+  font-size: 4em; /* Ajustado el tamaño general */
+  color: #00ffcc;
+  margin-bottom: 20px;
+  display: flex; /* Usa flexbox para alinear los dígitos */
+  justify-content: center;
+  align-items: baseline; /* Alinea en la base para puntos/comas */
+  background-color: rgba(0, 0, 0, 0.5);
+  border-radius: 10px;
+  border: 1px solid #00ffcc;
+  padding: 10px 5px; /* Padding interno */
+  text-shadow: 0 0 8px #00ffcc, 0 0 15px #00ffcc;
+  overflow: hidden; /* Evita desbordamientos */
+}
+
+.digit-box {
+  display: inline-block;
+  width: 0.7em; /* Ancho fijo para cada dígito */
+  text-align: center;
+  line-height: 1; /* Asegura altura consistente */
+}
+
+.separator {
+  width: 0.3em; /* Ancho más pequeño para el separador */
+  text-align: center;
+  line-height: 1;
+  margin: 0 -0.05em; /* Ajuste fino del espaciado del separador */
+}
+
+
+/* Puntuación */
+.score {
+  font-size: 1.6em; /* Ajustado */
+  margin-bottom: 25px;
+  color: #f0f0f0;
+  font-weight: bold;
+}
+
+.score span {
+    color: #00ffcc;
+    font-size: 1.2em;
+}
+
+/* Botones */
+.buttons {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  margin-bottom: 25px;
+}
+
+button {
+  font-family: 'Roboto', sans-serif;
+  padding: 12px 25px;
+  font-size: 1.1em;
+  font-weight: bold;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  min-width: 130px; /* Ancho mínimo para que no cambien tamaño bruscamente */
+  text-align: center;
+}
+
+.start-button {
+  background-color: #4CAF50; /* Verde */
+  color: white;
+  box-shadow: 0 4px 10px rgba(76, 175, 80, 0.4);
+}
+
+.start-button:hover:not(:disabled) {
+  background-color: #45a049;
+  box-shadow: 0 6px 15px rgba(76, 175, 80, 0.6);
+  transform: translateY(-2px);
+}
+
+.start-button:disabled {
+    background-color: #9e9e9e; /* Gris más oscuro para deshabilitado */
+    color: #666666;
+    cursor: not-allowed;
+    box-shadow: none;
+    transform: none;
+}
+
+/* Botón Pausar/Reanudar (cambia color) */
+.pause-button {
+  background-color: #f44336; /* Rojo para Pausar */
+  color: white;
+  box-shadow: 0 4px 10px rgba(244, 67, 54, 0.4);
+}
+.resume-button {
+    background-color: #ff9800; /* Naranja para Reanudar */
+    color: white;
+    box-shadow: 0 4px 10px rgba(255, 152, 0, 0.4);
+}
+
+.pause-button:hover:not(:disabled) {
+  background-color: #da190b;
+  box-shadow: 0 6px 15px rgba(244, 67, 54, 0.6);
+  transform: translateY(-2px);
+}
+.resume-button:hover:not(:disabled) {
+  background-color: #f57c00;
+  box-shadow: 0 6px 15px rgba(255, 152, 0, 0.6);
+  transform: translateY(-2px);
+}
+
+.pause-button:disabled,
+.resume-button:disabled {
+    background-color: #9e9e9e; /* Gris más oscuro para deshabilitado */
+    color: #666666;
+    cursor: not-allowed;
+    box-shadow: none;
+    transform: none;
+}
+
+
+/* Reporte de fin de juego */
+.game-report {
+  margin-top: 25px;
+  padding: 20px;
+  background-color: rgba(0, 0, 0, 0.6);
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  max-height: 300px; /* Altura máxima con scroll si hay muchos intentos */
+  overflow-y: auto; /* Scroll vertical */
+}
+
+.game-report h2 {
+  margin: 0 0 15px 0;
+  color: #00ffcc;
+   font-family: 'Orbitron', sans-serif;
+}
+
+.game-report p {
+  margin: 0 0 15px 0;
+  font-size: 1.1em; /* Ajustado */
+}
+
+.history-list {
+    list-style: none;
+    padding: 0;
+    margin: 10px 0 0 0;
+    text-align: left; /* Alinea el texto de la lista a la izquierda */
+}
+
+.history-item {
+    background-color: rgba(255, 255, 255, 0.05);
+    padding: 8px 12px;
+    margin-bottom: 5px;
+    border-radius: 4px;
+    font-family: 'Roboto Mono', monospace;
+    font-size: 0.95em;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.history-item .time {
+    color: #eee;
+}
+
+.history-item .result {
+    font-weight: bold;
+    padding: 2px 6px;
+    border-radius: 3px;
+    font-size: 0.9em;
+}
+
+.history-item .hit {
+    color: #1a1a1a;
+    background-color: #00ffcc; /* Verde acierto */
+}
+
+.history-item .miss {
+    color: #ffcdd2; /* Rojo claro fallo */
+    background-color: rgba(244, 67, 54, 0.3); /* Rojo fallo transparente */
+}
+
+/* Animación para cuando se acierta (puede aplicarse al score o a la fila) */
+.score-increase-animation {
+  animation: pulse 0.5s ease-out;
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); color: #00ffcc; }
+  50% { transform: scale(1.2); color: #ffffff; }
+  100% { transform: scale(1); color: #00ffcc; }
+}
+
+/* Animación especial para el mensaje de más de 1 punto */
+.special-win {
+    animation: rainbowGlow 2s infinite;
+}
+
+@keyframes rainbowGlow {
+  0% { text-shadow: 0 0 5px #ff0000, 0 0 10px #ff0000; color: #ff8a8a; }
+  14% { text-shadow: 0 0 5px #ff7f00, 0 0 10px #ff7f00; color: #ffd18a; }
+  28% { text-shadow: 0 0 5px #ffff00, 0 0 10px #ffff00; color: #ffff8d; }
+  42% { text-shadow: 0 0 5px #00ff00, 0 0 10px #00ff00; color: #b9f6ca; }
+  57% { text-shadow: 0 0 5px #0000ff, 0 0 10px #0000ff; color: #8c9eff; }
+  71% { text-shadow: 0 0 5px #4b0082, 0 0 10px #4b0082; color: #b388ff; }
+  85% { text-shadow: 0 0 5px #9400d3, 0 0 10px #9400d3; color: #ea80fc; }
+  100% { text-shadow: 0 0 5px #ff0000, 0 0 10px #ff0000; color: #ff8a8a; }
+}
+
+
+/* Estilos base (móvil primero es una buena práctica) */
+.game-container {
+    padding: 20px 15px; /* Menos padding lateral en móvil */
+    /* ... otros estilos base ... */
+}
+
+.timer-digits {
+    font-size: 3em; /* Más pequeño en móvil */
+}
+
+h1 {
+    font-size: 1.8em;
+}
+
+button {
+    padding: 10px 15px;
+    font-size: 1em;
+}
+
+/* Estilos para pantallas más grandes (ej. tablets y escritorio) */
+@media (min-width: 600px) {
+    .game-container {
+        padding: 30px 40px; /* Restaura padding original */
+        max-width: 550px; /* Restaura ancho máximo */
+    }
+    .timer-digits {
+        font-size: 4em; /* Restaura tamaño original */
+    }
+    h1 {
+        font-size: 2.3em;
+    }
+     button {
+        padding: 12px 25px;
+        font-size: 1.1em;
+    }
+}
+
