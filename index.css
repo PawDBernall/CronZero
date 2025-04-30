@@ -9,39 +9,109 @@ body {
   align-items: center;
   min-height: 100vh;
   text-align: center;
-  overflow: hidden;
+  overflow-y: auto; /* Permite scroll si el contenido es largo */
 }
 
 #root {
   width: 100%;
-  max-width: 550px; /* Un poco más ancho para el selector y reporte */
+  max-width: 550px;
   padding: 20px;
 }
 
-/* Contenedor principal del juego */
-.game-container {
+/* Contenedor principal (común para menú y juego) */
+.app-container {
   background-color: rgba(0, 0, 0, 0.4);
   padding: 30px 40px;
   border-radius: 15px;
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
   backdrop-filter: blur(5px);
   border: 1px solid rgba(255, 255, 255, 0.2);
-  transition: transform 0.3s ease-out;
+  transition: all 0.3s ease-out; /* Animación general */
 }
 
-.game-container:hover {
-    transform: scale(1.01); /* Reducido un poco el zoom */
+/* --- Estilos Menú Inicial --- */
+.menu-container, .config-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px; /* Espacio entre elementos */
 }
 
-/* Selector de dificultad */
-.difficulty-selector {
-    margin-bottom: 20px;
+.menu-icon {
+    font-size: 5em; /* Tamaño del icono */
+    margin-bottom: 5px;
+    filter: drop-shadow(0 0 10px rgba(0, 255, 204, 0.5)); /* Sombra tipo neón */
+}
+
+.menu-title, .config-title {
+  font-family: 'Orbitron', sans-serif;
+  color: #f0f0f0;
+  font-size: 2.3em;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+  margin: 0;
+}
+
+.menu-options, .config-options {
+    display: flex;
+    flex-direction: column; /* Apila opciones */
+    align-items: center;
+    gap: 10px; /* Reducido gap */
+    width: 100%;
+}
+
+.menu-options h3, .config-options h3 {
+    margin: 10px 0 5px 0;
+    color: #ccc;
+    font-size: 1.1em;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.menu-buttons, .config-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    flex-wrap: wrap; /* Permite que los botones pasen abajo si no caben */
+}
+
+/* Botones específicos de Menú/Config */
+.config-button, .back-button, .duration-button {
+    background-color: rgba(255, 255, 255, 0.15);
+    color: #eee;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    padding: 10px 20px;
+    font-size: 1em;
+}
+.config-button:hover, .back-button:hover, .duration-button:hover {
+    background-color: rgba(255, 255, 255, 0.25);
+    border-color: rgba(255, 255, 255, 0.5);
+}
+
+.duration-button.active {
+    background-color: #00ffcc;
+    color: #1a1a1a;
+    border-color: #00ffcc;
+    font-weight: bold;
+    box-shadow: 0 0 10px rgba(0, 255, 204, 0.5);
+}
+
+/* --- Estilos Juego Principal --- */
+.game-container {
+    display: flex; /* Usar flexbox para ordenar elementos */
+    flex-direction: column;
+    align-items: center; /* Centrar todo */
+    gap: 15px; /* Espacio entre elementos principales */
+}
+
+/* Selector de dificultad (en juego y menú) */
+.difficulty-selector, .game-difficulty-selector { /* Estilos comunes */
+    margin-bottom: 5px; /* Menos margen que en el menú */
     display: flex;
     justify-content: center;
     gap: 15px;
 }
 
-.difficulty-selector button {
+.difficulty-selector button, .game-difficulty-selector button { /* Estilos comunes para botones */
     font-family: 'Roboto', sans-serif;
     padding: 8px 15px;
     font-size: 0.9em;
@@ -51,9 +121,10 @@ body {
     background-color: rgba(255, 255, 255, 0.1);
     color: #eee;
     transition: all 0.2s ease;
+    min-width: 120px; /* Ancho mínimo */
 }
 
-.difficulty-selector button.active {
+.difficulty-selector button.active, .game-difficulty-selector button.active { /* Activo */
     background-color: #00ffcc;
     color: #1a1a1a;
     border-color: #00ffcc;
@@ -61,79 +132,62 @@ body {
     box-shadow: 0 0 10px rgba(0, 255, 204, 0.5);
 }
 
-.difficulty-selector button:disabled {
+.difficulty-selector button:disabled, .game-difficulty-selector button:disabled { /* Deshabilitado */
     opacity: 0.5;
     cursor: not-allowed;
+    background-color: rgba(158, 158, 158, 0.2);
+    border-color: rgba(158, 158, 158, 0.4);
+    color: #aaa;
 }
 
-.difficulty-selector button:not(.active):not(:disabled):hover {
+.difficulty-selector button:not(.active):not(:disabled):hover,
+.game-difficulty-selector button:not(.active):not(:disabled):hover { /* Hover */
     background-color: rgba(255, 255, 255, 0.2);
     border-color: rgba(255, 255, 255, 0.8);
 }
 
-
-/* Título */
-h1 {
-  font-family: 'Orbitron', sans-serif;
-  color: #f0f0f0;
-  margin-bottom: 20px; /* Reducido un poco */
-  font-size: 2.3em; /* Ajustado */
-   text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
-}
-
-/* Cronómetro con dígitos separados */
+/* Cronómetro */
 .timer-digits {
-  font-family: 'Orbitron', 'Roboto Mono', monospace; /* Prioriza Orbitron, luego Mono */
-  font-size: 4em; /* Ajustado el tamaño general */
+  font-family: 'Orbitron', 'Roboto Mono', monospace;
+  font-size: 4em;
   color: #00ffcc;
-  margin-bottom: 20px;
-  display: flex; /* Usa flexbox para alinear los dígitos */
+  /* margin-bottom: 15px; Ajustado por el gap del flex container */
+  display: flex;
   justify-content: center;
-  align-items: baseline; /* Alinea en la base para puntos/comas */
+  align-items: baseline;
   background-color: rgba(0, 0, 0, 0.5);
   border-radius: 10px;
   border: 1px solid #00ffcc;
-  padding: 10px 5px; /* Padding interno */
+  padding: 10px 5px;
   text-shadow: 0 0 8px #00ffcc, 0 0 15px #00ffcc;
-  overflow: hidden; /* Evita desbordamientos */
+  overflow: hidden;
 }
-
-.digit-box {
+.digit-box, .separator {
   display: inline-block;
-  width: 0.7em; /* Ancho fijo para cada dígito */
-  text-align: center;
-  line-height: 1; /* Asegura altura consistente */
-}
-
-.separator {
-  width: 0.3em; /* Ancho más pequeño para el separador */
   text-align: center;
   line-height: 1;
-  margin: 0 -0.05em; /* Ajuste fino del espaciado del separador */
 }
-
+.digit-box { width: 0.7em; }
+.separator { width: 0.3em; margin: 0 -0.05em; }
 
 /* Puntuación */
 .score {
-  font-size: 1.6em; /* Ajustado */
-  margin-bottom: 25px;
+  font-size: 1.6em;
+  /* margin-bottom: 15px; Ajustado por el gap del flex container */
   color: #f0f0f0;
   font-weight: bold;
 }
+.score span { color: #00ffcc; font-size: 1.2em; }
 
-.score span {
-    color: #00ffcc;
-    font-size: 1.2em;
-}
-
-/* Botones */
-.buttons {
+/* Botones Juego */
+.game-buttons {
   display: flex;
   justify-content: center;
   gap: 20px;
-  margin-bottom: 25px;
+ /* margin-bottom: 15px; Ajustado por el gap del flex container */
 }
 
+/* Estilo base común para todos los botones principales */
 button {
   font-family: 'Roboto', sans-serif;
   padding: 12px 25px;
@@ -145,42 +199,32 @@ button {
   transition: all 0.3s ease;
   text-transform: uppercase;
   letter-spacing: 1px;
-  min-width: 130px; /* Ancho mínimo para que no cambien tamaño bruscamente */
+  min-width: 130px;
   text-align: center;
 }
-
+/* Estilos específicos para botones de acción principal */
 .start-button {
-  background-color: #4CAF50; /* Verde */
-  color: white;
+  background-color: #4CAF50; color: white;
   box-shadow: 0 4px 10px rgba(76, 175, 80, 0.4);
 }
-
 .start-button:hover:not(:disabled) {
   background-color: #45a049;
   box-shadow: 0 6px 15px rgba(76, 175, 80, 0.6);
   transform: translateY(-2px);
 }
-
 .start-button:disabled {
-    background-color: #9e9e9e; /* Gris más oscuro para deshabilitado */
-    color: #666666;
-    cursor: not-allowed;
-    box-shadow: none;
-    transform: none;
+    background-color: #9e9e9e; color: #666666;
+    cursor: not-allowed; box-shadow: none; transform: none;
 }
 
-/* Botón Pausar/Reanudar (cambia color) */
 .pause-button {
-  background-color: #f44336; /* Rojo para Pausar */
-  color: white;
+  background-color: #f44336; color: white;
   box-shadow: 0 4px 10px rgba(244, 67, 54, 0.4);
 }
 .resume-button {
-    background-color: #ff9800; /* Naranja para Reanudar */
-    color: white;
+    background-color: #ff9800; color: white;
     box-shadow: 0 4px 10px rgba(255, 152, 0, 0.4);
 }
-
 .pause-button:hover:not(:disabled) {
   background-color: #da190b;
   box-shadow: 0 6px 15px rgba(244, 67, 54, 0.6);
@@ -191,95 +235,103 @@ button {
   box-shadow: 0 6px 15px rgba(255, 152, 0, 0.6);
   transform: translateY(-2px);
 }
-
-.pause-button:disabled,
-.resume-button:disabled {
-    background-color: #9e9e9e; /* Gris más oscuro para deshabilitado */
-    color: #666666;
-    cursor: not-allowed;
-    box-shadow: none;
-    transform: none;
+.pause-button:disabled, .resume-button:disabled {
+    background-color: #9e9e9e; color: #666666;
+    cursor: not-allowed; box-shadow: none; transform: none;
 }
 
 
 /* Reporte de fin de juego */
 .game-report {
-  margin-top: 25px;
+  margin-top: 10px; /* Ajustado margen superior */
   padding: 20px;
   background-color: rgba(0, 0, 0, 0.6);
   border-radius: 10px;
   border: 1px solid rgba(255, 255, 255, 0.3);
-  max-height: 300px; /* Altura máxima con scroll si hay muchos intentos */
-  overflow-y: auto; /* Scroll vertical */
+  max-height: 300px;
+  overflow-y: auto;
+  width: 100%; /* Ocupa ancho para centrar botón */
+  box-sizing: border-box; /* Asegura que padding no aumente el ancho */
 }
-
 .game-report h2 {
-  margin: 0 0 15px 0;
-  color: #00ffcc;
-   font-family: 'Orbitron', sans-serif;
+  margin: 0 0 15px 0; color: #00ffcc; font-family: 'Orbitron', sans-serif;
 }
-
-.game-report p {
-  margin: 0 0 15px 0;
-  font-size: 1.1em; /* Ajustado */
-}
-
+.game-report p { margin: 0 0 15px 0; font-size: 1.1em; }
 .history-list {
-    list-style: none;
-    padding: 0;
-    margin: 10px 0 0 0;
-    text-align: left; /* Alinea el texto de la lista a la izquierda */
+    list-style: none; padding: 0; margin: 10px 0 0 0; text-align: left;
 }
-
 .history-item {
-    background-color: rgba(255, 255, 255, 0.05);
-    padding: 8px 12px;
-    margin-bottom: 5px;
-    border-radius: 4px;
-    font-family: 'Roboto Mono', monospace;
-    font-size: 0.95em;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+    background-color: rgba(255, 255, 255, 0.05); padding: 8px 12px;
+    margin-bottom: 5px; border-radius: 4px; font-family: 'Roboto Mono', monospace;
+    font-size: 0.95em; display: flex; justify-content: space-between; align-items: center;
 }
-
-.history-item .time {
-    color: #eee;
-}
-
+.history-item .time { color: #eee; }
 .history-item .result {
-    font-weight: bold;
-    padding: 2px 6px;
-    border-radius: 3px;
-    font-size: 0.9em;
+    font-weight: bold; padding: 2px 6px; border-radius: 3px; font-size: 0.9em;
+}
+.history-item .hit { color: #1a1a1a; background-color: #00ffcc; }
+.history-item .miss { color: #ffcdd2; background-color: rgba(244, 67, 54, 0.3); }
+
+.game-report .back-button { /* Estilo para el botón dentro del reporte */
+    margin-top: 20px;
+    /* Hereda estilos base, si se quiere diferente, añadir aquí */
+     background-color: rgba(255, 255, 255, 0.15);
+     color: #eee;
+     border: 1px solid rgba(255, 255, 255, 0.3);
+}
+.game-report .back-button:hover {
+     background-color: rgba(255, 255, 255, 0.25);
+     border-color: rgba(255, 255, 255, 0.5);
 }
 
-.history-item .hit {
-    color: #1a1a1a;
-    background-color: #00ffcc; /* Verde acierto */
+
+/* --- Estilos Configuración --- */
+.config-container {
+     /* Sin cambios respecto a la versión anterior */
+     gap: 20px;
+}
+.config-options {
+    /* Sin cambios respecto a la versión anterior */
+     gap: 10px;
+}
+.config-buttons {
+     /* Sin cambios respecto a la versión anterior */
+     gap: 15px;
+}
+.config-footer-buttons { /* Contenedor para botones Guardar/Cancelar */
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-top: 15px; /* Espacio superior reducido */
+    width: 100%;
 }
 
-.history-item .miss {
-    color: #ffcdd2; /* Rojo claro fallo */
-    background-color: rgba(244, 67, 54, 0.3); /* Rojo fallo transparente */
+/* Botones Guardar/Cancelar */
+.save-button {
+    background-color: #4CAF50; color: white;
+    border: none; /* Sobrescribe borde si hereda */
+}
+.save-button:hover {
+    background-color: #45a049;
 }
 
-/* Animación para cuando se acierta (puede aplicarse al score o a la fila) */
-.score-increase-animation {
-  animation: pulse 0.5s ease-out;
+.cancel-button {
+     background-color: #f44336; color: white;
+     border: none; /* Sobrescribe borde si hereda */
 }
+ .cancel-button:hover {
+     background-color: #d32f2f;
+ }
 
+
+/* Animaciones */
+.score-increase-animation { animation: pulse 0.5s ease-out; }
 @keyframes pulse {
   0% { transform: scale(1); color: #00ffcc; }
   50% { transform: scale(1.2); color: #ffffff; }
   100% { transform: scale(1); color: #00ffcc; }
 }
-
-/* Animación especial para el mensaje de más de 1 punto */
-.special-win {
-    animation: rainbowGlow 2s infinite;
-}
-
+.special-win { animation: rainbowGlow 2s infinite; }
 @keyframes rainbowGlow {
   0% { text-shadow: 0 0 5px #ff0000, 0 0 10px #ff0000; color: #ff8a8a; }
   14% { text-shadow: 0 0 5px #ff7f00, 0 0 10px #ff7f00; color: #ffd18a; }
@@ -290,42 +342,3 @@ button {
   85% { text-shadow: 0 0 5px #9400d3, 0 0 10px #9400d3; color: #ea80fc; }
   100% { text-shadow: 0 0 5px #ff0000, 0 0 10px #ff0000; color: #ff8a8a; }
 }
-
-
-/* Estilos base (móvil primero es una buena práctica) */
-.game-container {
-    padding: 20px 15px; /* Menos padding lateral en móvil */
-    /* ... otros estilos base ... */
-}
-
-.timer-digits {
-    font-size: 3em; /* Más pequeño en móvil */
-}
-
-h1 {
-    font-size: 1.8em;
-}
-
-button {
-    padding: 10px 15px;
-    font-size: 1em;
-}
-
-/* Estilos para pantallas más grandes (ej. tablets y escritorio) */
-@media (min-width: 600px) {
-    .game-container {
-        padding: 30px 40px; /* Restaura padding original */
-        max-width: 550px; /* Restaura ancho máximo */
-    }
-    .timer-digits {
-        font-size: 4em; /* Restaura tamaño original */
-    }
-    h1 {
-        font-size: 2.3em;
-    }
-     button {
-        padding: 12px 25px;
-        font-size: 1.1em;
-    }
-}
-
