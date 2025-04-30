@@ -1,14 +1,12 @@
 import path from 'path';
 import { defineConfig, loadEnv } from 'vite';
-import react from '@vitejs/plugin-react'; // <--- 1. IMPORTA EL PLUGIN
+import react from '@vitejs/plugin-react';
 
 export default defineConfig(({ mode }) => {
     const env = loadEnv(mode, '.', '');
     return {
-      // 2. AÑADE LA SECCIÓN plugins:
-      plugins: [react()], // <--- Asegúrate de que esta línea esté aquí
-
-      // Mantén tu configuración existente:
+      plugins: [react()],
+      base: '/CronZero/', // <-- ¡ASEGÚRATE QUE ESTÁ AQUÍ!
       define: {
         'process.env.API_KEY': JSON.stringify(env.API_KEY)
       },
@@ -16,7 +14,9 @@ export default defineConfig(({ mode }) => {
         alias: {
           '@': path.resolve(__dirname, '.'),
         }
+      },
+      build: {
+        outDir: 'docs'
       }
-      // Fin de tu configuración existente
     };
 });
